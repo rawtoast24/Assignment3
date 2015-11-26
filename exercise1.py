@@ -14,7 +14,6 @@ __license__ = "MIT License"
 #####################
 # HELPER FUNCTIONS ##
 #####################
-
 def remove_duplicates(l):
     """
     Removes duplicates from l, where l is a List of Lists.
@@ -38,6 +37,24 @@ class UnknownAttributeException(Exception):
     """
     pass
 
+EMPLOYEES = [["Surname", "FirstName", "Age", "Salary"],
+             ["Smith", "Mary", 25, 2000],
+             ["Black", "Lucy", 40, 3000],
+             ["Verdi", "Nico", 36, 4500],
+             ["Smith", "Mark", 40, 3900]]
+
+
+def filter_employees(row):
+    """
+    Check if employee represented by row
+    is AT LEAST 30 years old and makes
+    MORE THAN 3500.
+    :param row: A List in the format:
+        [{Surname}, {FirstName}, {Age}, {Salary}]
+    :return: True if the row satisfies the condition.
+    """
+    return row[-2] >= 30 and row[-1] > 3500
+
 
 def selection(t, f):
     """
@@ -52,12 +69,6 @@ def selection(t, f):
     [["A", "B", "C"], [4, 5, 6]]
 
     """
-    new_t = f(t)
-
-    if new_t == []:
-        new_t = None
-
-    return new_t
 
 
 def projection(t, r):
