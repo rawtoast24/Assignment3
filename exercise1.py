@@ -56,7 +56,7 @@ def filter_employees(row):
     return row[-2] >= 30 and row[-1] > 3500
 
 
-def selection(t, f):
+def selection(t1, f):
     """
     Perform select operation on table t that satisfy condition f.
 
@@ -69,7 +69,16 @@ def selection(t, f):
     [["A", "B", "C"], [4, 5, 6]]
 
     """
-
+    i = 1
+    result = []
+    result.append(t1[0])
+    while i < len(t1):
+        if f(t1[i]):
+            result.append(t1[i])
+        i += 1
+    if len(result) == 1:
+        result = None
+    return result
 
 def projection(t, r):
     """
