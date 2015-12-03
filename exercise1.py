@@ -80,7 +80,14 @@ def selection(t1, f):
         result = None
     return result
 
-def projection(t, r):
+
+GRADUATES = [["Number", "Surname", "Age"],
+             [7274, "Robinson", 37],
+             [7432, "O'Malley", 39],
+             [9824, "Darkes", 38]]
+
+
+def projection(table, attributelist):
     """
     Perform projection operation on table t
     using the attributes subset r.
@@ -91,8 +98,28 @@ def projection(t, r):
     [["A", "C"], [1, 3], [4, 6]]
 
     """
+    # i tracks the spot for the attribute list
+    i = 0
+    # j tracks which row within the table is being compared
+    j = 0
+    # k tracks which item within the row is being compared
+    k = 0
+    result = []
 
-    return []
+    while i < len(attributelist):
+        while k < len(table[j]):
+            if attributelist[i] == table[j][k]:
+                while j < len(table):
+                    result.append(table[j][k])
+                    j += 1
+            j = 0
+            k += 1
+        k = 0
+        i += 1
+
+    return result
+
+print projection(GRADUATES, ["Surname"])
 
 
 def cross_product(t1, t2):
@@ -104,7 +131,9 @@ def cross_product(t1, t2):
     > R2 = [["C", "D"], [5,6]]
     [["A", "B", "C", "D"], [1, 2, 5, 6], [3, 4, 5, 6]]
 
-
     """
+    t1 = 0
+    t2 = 0
 
-    return []
+    result = t1 + t2
+    return result
