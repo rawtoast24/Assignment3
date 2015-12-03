@@ -110,7 +110,7 @@ def projection(table, attributelist):
         while k < len(table[j]):
             if attributelist[i] == table[j][k]:
                 while j < len(table):
-                    result.append(table[j][k])
+                    result.append([table[j][k]])
                     j += 1
             j = 0
             k += 1
