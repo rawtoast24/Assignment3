@@ -53,14 +53,12 @@ def is_more_than_x_years_ago(x, date_string):
     return (date - x_years_ago).total_seconds() < 0
 
 
-def decide(input_file, watchlist_file, countries_file):
+def decide(input_file, countries_file):
     """
     Decides whether a traveller's entry into Kanadia should be accepted
 
     :param input_file: The name of a JSON formatted file that contains
         cases to decide
-    :param watchlist_file: The name of a JSON formatted file that
-        contains names and passport numbers on a watchlist
     :param countries_file: The name of a JSON formatted file that contains
         country data, such as whether an entry or transit visa is required,
         and whether there is currently a medical advisory
@@ -97,3 +95,5 @@ def valid_date_format(date_string):
     """
 
     return False
+
+
