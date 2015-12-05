@@ -125,6 +125,16 @@ def decide(input_file, countries_file):
     if entry_record[0]["entry_reason"] == "visit" and is_more_than_x_years_ago(2,entry_record[0]["visa"]["date"]):
         result = ["Reject"]
 
+    # Quarantine travellers coming from places with medical advisories
+    medical_list = []
+    for code in country_dictionary:
+        if country_dictionary[code]["medical_advisory"] != "":
+            medical_list.append(country_dictionary[code]["code"])
+
+    if entry_record[0]["from"]["country"] in medical_list:
+        result = ["Quarantine"]
+
+
 
     return result
 print decide("Entry Record.json","countries.json")
