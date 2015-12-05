@@ -54,6 +54,7 @@ def is_more_than_x_years_ago(x, date_string):
 
 
 def decide(input_file, countries_file):
+# def decide(input_file):
     """
     Decides whether a traveller's entry into Kanadia should be accepted
 
@@ -65,8 +66,58 @@ def decide(input_file, countries_file):
     :return: List of strings. Possible values of strings are:
         "Accept", "Reject", and "Quarantine"
     """
+   # convert the entry record from JSON into Python
+    with open(input_file,"r") as file_reader:
+        file_contents = file_reader.read()
 
-    return ["Reject"]
+    entry_record = json.loads(file_contents)
+
+    # convert the list of countries from JSON into Python
+    with open(countries_file, "r") as country_reader:
+        country_contents = country_reader.read()
+
+    country_dictionary = json.loads(country_contents)
+
+    #check if the entry record is complete; rejects if it isn't
+    i = 0
+    j = 1
+    decision = []
+    result = []
+    for key in entry_record[0]:
+        if entry_record[0][key] == "":
+            decision.append("Reject")
+        else:
+            decision.append("Accept")
+
+    # Cleans up the decision list. Might not be necessary - check later
+    while i < len(decision):
+        while j < len(decision):
+            if decision[i] == decision[j]:
+                decision.remove(decision[j])
+            j += 1
+        j = 1
+        i += 1
+
+
+    # check if country is known or unknown; reject if latter
+    country_list = []
+    for key in country_dictionary:
+        country_list.append(key)
+
+    if entry_record[0]["from"]["country"] not in country_list:
+        decision.append("Reject")
+
+
+    # Iterate through the decision list and decide if person should be quarantined, rejected, or accepted
+    if "Quarantine" in decision:
+        result.append("Quarantine")
+    elif "Reject" in decision:
+        result.append("Reject")
+    else:
+        result.append("Accept")
+    return result
+
+print decide("Entry Record.json","countries.json")
 
 
 def valid_passport_format(passport_number):
@@ -97,3 +148,7 @@ def valid_date_format(date_string):
     return False
 
 
+"""
+to get the keys of a dictionary, keys = dictionary.keys()
+to check for empty strings, run a while loop checking for dictionary[keys[i]]
+"""
