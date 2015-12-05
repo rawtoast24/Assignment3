@@ -117,9 +117,14 @@ def decide(input_file, countries_file):
         result.append("Accept")
 
     # Automatically allow KAN natives back in
-
     if entry_record[0]["home"]["country"] == "KAN":
         result = ["Accept"]
+
+    # If applicant is a visitor, check if their visit visa is valid
+
+    if entry_record[0]["entry_reason"] == "visit" and is_more_than_x_years_ago(2,entry_record[0]["visa"]["date"]):
+        result = ["Reject"]
+
 
     return result
 print decide("Entry Record.json","countries.json")
