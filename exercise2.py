@@ -115,8 +115,13 @@ def decide(input_file, countries_file):
         result.append("Reject")
     else:
         result.append("Accept")
-    return result
 
+    # Automatically allow KAN natives back in
+
+    if entry_record[0]["home"]["country"] == "KAN":
+        result = ["Accept"]
+
+    return result
 print decide("Entry Record.json","countries.json")
 
 
