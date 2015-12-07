@@ -54,7 +54,6 @@ def is_more_than_x_years_ago(x, date_string):
 
 
 def decide(input_file, countries_file):
-# def decide(input_file):
     """
     Decides whether a traveller's entry into Kanadia should be accepted
 
@@ -66,7 +65,12 @@ def decide(input_file, countries_file):
     :return: List of strings. Possible values of strings are:
         "Accept", "Reject", and "Quarantine"
     """
-   # convert the entry record from JSON into Python
+    # create a list to store the decision for each record
+    result = []
+    # Used to iterate through the entry records
+    a = 0
+
+    # Convert the entry record from JSON into Python
     with open(input_file,"r") as file_reader:
         file_contents = file_reader.read()
 
@@ -78,63 +82,61 @@ def decide(input_file, countries_file):
 
     country_dictionary = json.loads(country_contents)
 
-    #check if the entry record is complete; rejects if it isn't
-    i = 0
-    j = 1
-    decision = []
-    result = []
-    for key in entry_record[0]:
-        if entry_record[0][key] == "":
-            decision.append("Reject")
-        else:
-            decision.append("Accept")
-
-    # Cleans up the decision list. Might not be necessary - check later
-    while i < len(decision):
-        while j < len(decision):
-            if decision[i] == decision[j]:
-                decision.remove(decision[j])
-            j += 1
-        j = 1
-        i += 1
-
-
-    # check if country is known or unknown; reject if latter
+    # Create a list of country codes
     country_list = []
     for key in country_dictionary:
         country_list.append(key)
 
-    if entry_record[0]["from"]["country"] not in country_list:
-        decision.append("Reject")
+    # Create a list of countries with medical alerts
+    medical_alert = []
+    for country in country_dictionary:
+        if country_dictionary[country]["medical_advisory"] != "":
+            medical_alert.append(country_dictionary[country]["code"])
+    while a < len(entry_record):
+        # create a list to store the decision for each check within a record
+        decision = []
+        # Step 1. check for missing information
+        b = 0
+        for key in entry_record[a]:
+            if entry_record[a][key] == "":
+                decision.append("Reject")
+            else:
+                decision.append("Accept")
+            while b < len(entry_record[a][key]):
+                if entry_record[a][key][b] == "":
+                    decision.append("Reject")
+                else:
+                    decision.append("Accept")
+                b += 1
+        # Step 2. Check all locations
+        if entry_record[a]["from"]["country"] not in country_list:
+            decision.append("Reject")
+        if entry_record[a]["home"]["country"] not in country_list:
+            decision.append("Reject")
+        if "via" in entry_record[a]:
+            if entry_record[a]["via"] not in country_list:
+                decision.append("Reject")
+        # Step 3. Accept all returning KAN citizens
+        if entry_record[a]["home"]["country"] == "KAN":
+            decision.append("Accept")
+        # Step 4. Check if any visitors have a valid visa
+        if entry_record[a]["entry_reason"] == "visit":
+            if is_more_than_x_years_ago(2,entry_record[a]["visa"]["date"]):
+                decision.append("Reject")
+        # Step 5. Check if anyone is coming from a country with a medical alert
+        if entry_record[a]["from"]["country"] in medical_alert:
+            decision.append("Quarantine")
 
+        # Come up with a final decision
+        if "Quarantine" in decision:
+            result.append("Quarantine")
+        elif "Reject" in decision:
+            result.append("Reject")
+        else:
+            result.append("Accept")
 
-    # Iterate through the decision list and decide if person should be quarantined, rejected, or accepted
-    if "Quarantine" in decision:
-        result.append("Quarantine")
-    elif "Reject" in decision:
-        result.append("Reject")
-    else:
-        result.append("Accept")
-
-    # Automatically allow KAN natives back in
-    if entry_record[0]["home"]["country"] == "KAN":
-        result = ["Accept"]
-
-    # If applicant is a visitor, check if their visit visa is valid
-
-    if entry_record[0]["entry_reason"] == "visit" and is_more_than_x_years_ago(2,entry_record[0]["visa"]["date"]):
-        result = ["Reject"]
-
-    # Quarantine travellers coming from places with medical advisories
-    medical_list = []
-    for code in country_dictionary:
-        if country_dictionary[code]["medical_advisory"] != "":
-            medical_list.append(country_dictionary[code]["code"])
-
-    if entry_record[0]["from"]["country"] in medical_list:
-        result = ["Quarantine"]
-
-
+        # Iterate to the next record
+        a += 1
 
     return result
 print decide("Entry Record.json","countries.json")
