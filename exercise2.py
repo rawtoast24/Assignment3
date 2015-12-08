@@ -259,8 +259,9 @@ def decide(input_file, countries_file):
             decision.append("Accept")
         # Step 4. Check if any visitors have a valid visa
         if entry_record[a]["entry_reason"] == "visit":
-            if is_more_than_x_years_ago(2,entry_record[a]["visa"]["date"]):
-                decision.append("Reject")
+            if valid_date_format(entry_record[a]["visa"]["date"]):
+                if is_more_than_x_years_ago(2,entry_record[a]["visa"]["date"]):
+                    decision.append("Reject")
         # Step 5. Check if anyone is coming from a country with a medical alert
         if entry_record[a]["from"]["country"] in medical_alert:
             decision.append("Quarantine")
