@@ -52,6 +52,135 @@ def is_more_than_x_years_ago(x, date_string):
 
     return (date - x_years_ago).total_seconds() < 0
 
+def valid_passport_format(passport_number):
+    """
+    Checks whether a pasport number is five sets of five alpha-number characters separated by dashes
+    :param passport_number: alpha-numeric string
+    :return: Boolean; True if the format is valid, False otherwise
+    """
+    count = 0
+    passport_number = passport_number.upper()
+    correct = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
+               "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    decisions = []
+    if len(passport_number) == 29:
+        while count < 5:
+            if passport_number[count] in correct:
+                decisions.append("True")
+            else:
+                decisions.append("False")
+            count += 1
+        count = 6
+        while count < 11:
+            if passport_number[count] in correct:
+                decisions.append("True")
+            else:
+                decisions.append("False")
+            count += 1
+        count = 12
+        while count < 17:
+                if passport_number[count] in correct:
+                    decisions.append("True")
+                else:
+                    decisions.append("False")
+                count += 1
+        count = 18
+        while count < 22:
+                if passport_number[count] in correct:
+                    decisions.append("True")
+                else:
+                    decisions.append("False")
+                count += 1
+        count = 24
+        while count < 29:
+                if passport_number[count] in correct:
+                    decisions.append("True")
+                else:
+                    decisions.append("False")
+                count += 1
+        count = 5
+        while count < len(passport_number):
+            if passport_number[count] == "-":
+                decisions.append("True")
+            else:
+                decisions.append("False")
+            count += 6
+        if "False" in decisions:
+            result = False
+        else:
+            result = True
+    else:
+        result = False
+    return result
+
+
+def valid_visa_format(visa_code):
+    """
+    Checks whether a visa code is two groups of five alphanumeric characters
+    :param visa_code: alphanumeric string
+    :return: Boolean; True if the format is valid, False otherwise
+
+    """
+    count = 0
+    visa_code = visa_code.upper()
+    correct = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
+               "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    decisions = []
+    if len(visa_code) == 11:
+        while count < 5:
+            if visa_code[count] in correct:
+                decisions.append("True")
+            else:
+                decisions.append("False")
+            count += 1
+        count = 6
+        while count < 11:
+            if visa_code[count] in correct:
+                decisions.append("True")
+            else:
+                decisions.append("False")
+            count += 1
+        if visa_code[5] == "-":
+            decisions.append("True")
+        else:
+            decisions.append("False")
+
+        if "False" in decisions:
+            result = False
+        else:
+            result = True
+    else:
+        result = False
+    return result
+
+def valid_date_format(date_string):
+    """
+    Checks whether a date has the format YYYY-mm-dd in numbers
+    :param date_string: date to be checked
+    :return: Boolean True if the format is valid, False otherwise
+    """
+    correct = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    numbers = [0, 1, 2, 3, 5, 6, 8, 9]
+    decisions = []
+
+    if len(date_string) == 10:
+        for i in numbers:
+            if date_string[i] in correct:
+                decisions.append("True")
+            else:
+                decisions.append("False")
+        if date_string[4] and date_string[7] == "-":
+            decisions.append("True")
+        else:
+            decisions.append("False")
+        if "False" in decisions:
+            result = False
+        else:
+            result = True
+    else:
+        result = False
+    return result
+
 
 def decide(input_file, countries_file):
     """
@@ -96,22 +225,31 @@ def decide(input_file, countries_file):
         # create a list to store the decision for each check within a record
         decision = []
         # Step 1. check for missing information
-        b = 0
         for key in entry_record[a]:
             if entry_record[a][key] == "":
                 decision.append("Reject")
             else:
                 decision.append("Accept")
-            while b < len(entry_record[a][key]):
-                if entry_record[a][key][b] == "":
+        for key in entry_record[a]["home"]:
+            if entry_record[a]["home"][key] =="":
+                decision.append("Reject")
+            else:
+                decision.append("Accept")
+        for key in entry_record[a]["from"]:
+            if entry_record[a]["from"][key] =="":
+                decision.append("Reject")
+            else:
+                decision.append("Accept")
+        if "visa" in entry_record[a]:
+            for key in entry_record[a]["visa"]:
+                if entry_record[a]["visa"][key] =="":
                     decision.append("Reject")
                 else:
                     decision.append("Accept")
-                b += 1
         # Step 2. Check all locations
         if entry_record[a]["from"]["country"] not in country_list:
             decision.append("Reject")
-        if entry_record[a]["home"]["country"] not in country_list:
+        if entry_record[a]["home"]["country"] not in country_list and not "KAN":
             decision.append("Reject")
         if "via" in entry_record[a]:
             if entry_record[a]["via"] not in country_list:
@@ -127,6 +265,31 @@ def decide(input_file, countries_file):
         if entry_record[a]["from"]["country"] in medical_alert:
             decision.append("Quarantine")
 
+        # Check for valid Passport Number Format
+        if valid_passport_format(entry_record[a]["passport"]):
+            decision.append("Accept")
+        else:
+            decision.append("Reject")
+
+        # Check for valid Visa Number Format
+        if entry_record[a]["entry_reason"] == "visit":
+            if valid_visa_format(entry_record[a]["visa"]["code"]):
+                decision.append("Accept")
+            else:
+                decision.append("Reject")
+
+        # Check for valid Birth Date Format
+        if valid_date_format(entry_record[a]["birth_date"]):
+            decision.append("Accept")
+        else:
+            decision.append("Reject")
+
+        # Check for valid Visa Date Format
+        if entry_record[a]["entry_reason"] == "visit":
+            if valid_date_format(entry_record[a]["visa"]["date"]):
+                decision.append("Accept")
+            else:
+                decision.append("Reject")
         # Come up with a final decision
         if "Quarantine" in decision:
             result.append("Quarantine")
@@ -140,34 +303,6 @@ def decide(input_file, countries_file):
 
     return result
 print decide("Entry Record.json","countries.json")
-
-
-def valid_passport_format(passport_number):
-    """
-    Checks whether a pasport number is five sets of five alpha-number characters separated by dashes
-    :param passport_number: alpha-numeric string
-    :return: Boolean; True if the format is valid, False otherwise
-    """
-    return False
-
-
-def valid_visa_format(visa_code):
-    """
-    Checks whether a visa code is two groups of five alphanumeric characters
-    :param visa_code: alphanumeric string
-    :return: Boolean; True if the format is valid, False otherwise
-
-    """
-
-
-def valid_date_format(date_string):
-    """
-    Checks whether a date has the format YYYY-mm-dd in numbers
-    :param date_string: date to be checked
-    :return: Boolean True if the format is valid, False otherwise
-    """
-
-    return False
 
 
 """
