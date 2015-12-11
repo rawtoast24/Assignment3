@@ -6,16 +6,19 @@ EMPLOYEES = [["Surname", "FirstName", "Age", "Salary"],
 
 #!/usr/bin/env python3
 
-""" Assignment 3, Exercise 2, INF1340, Fall, 2015. DBMS
-
-This module performs table operations on database tables
-implemented as lists of lists. """
-
-__author__ = 'Susan Sim'
-__email__ = "ses@drsusansim.org"
-__copyright__ = "2015 Susan Sim"
-__license__ = "MIT License"
-
+# """
+#
+# Assignment 3, Exercise 2, INF1340, Fall, 2015. DBMS
+#
+# This module performs table operations on database tables
+# implemented as lists of lists.
+#
+#  """
+#
+# __author__ = 'Susan Sim'
+# __email__ = "ses@drsusansim.org"
+# __copyright__ = "2015 Susan Sim"
+# __license__ = "MIT License"
 
 #####################
 # HELPER FUNCTIONS ##
@@ -111,22 +114,46 @@ def projection(t, r):
     j = 0
     # k tracks which item within the row is being compared
     k = 0
-    result = []
+    result = [[]]
+    match_list = []
+    sub_result = []
     try:
-        while i < len(r):
-            while k < len(t[j]):
-                if r[i] == t[j][k]:
-                    while j < len(t):
-                        result.append([t[j][k]])
-                        j += 1
-                j = 0
-                k += 1
-            k = 0
+        # while i < len(r):
+        #     while k < len(t[j]):
+        #         if r[i] == t[j][k]:
+        #             while j < len(t):
+        #                 result.append(t[j][k])
+        #                 j += 1
+        #         j = 0
+        #         k += 1
+        #     k = 0
+        #     i += 1
+
+        while k < len(r):
+            while j < len(t[0]):
+                if t[0][j] == r[k]:
+                    result[0].append(t[0][j])
+                    match_list.append(j)
+                j += 1
+            # if j == len(t[i]) and k == len(r):
+            #     result.append(sub_result)
+            j = 0
+            k += 1
+        result.append([])
+
+        i = 1
+        while i < len(t):
+            for numeral in match_list:
+                result[len(result)-1].append(t[i][numeral])
             i += 1
+            result.append([])
+        del result[len(result)-1]
     except AssertionError:
         raise UnknownAttributeException
 
-    print result
+    return result
+
+
 
 
 def cross_product(t1, t2):
@@ -156,4 +183,4 @@ def cross_product(t1, t2):
 
     return result
 
-#projection(EMPLOYEES, ["Surname", "FirstName"])
+print projection(EMPLOYEES, ["Surname", "FirstName"])
