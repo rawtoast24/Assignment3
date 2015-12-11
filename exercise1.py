@@ -1,3 +1,9 @@
+EMPLOYEES = [["Surname", "FirstName", "Age", "Salary"],
+             ["Smith", "Mary", 25, 2000],
+             ["Black", "Lucy", 40, 3000],
+             ["Verdi", "Nico", 36, 4500],
+             ["Smith", "Mark", 40, 3900]]
+
 #!/usr/bin/env python3
 
 """ Assignment 3, Exercise 2, INF1340, Fall, 2015. DBMS
@@ -106,22 +112,21 @@ def projection(t, r):
     # k tracks which item within the row is being compared
     k = 0
     result = []
-
-    while i < len(r):
-        while k < len(t[j]):
-            if r[i] == t[j][k]:
-                while j < len(t):
-                    result.append([t[j][k]])
-                    j += 1
-            j = 0
-            k += 1
-        k = 0
-        i += 1
-
-    if len(result) == 0:
+    try:
+        while i < len(r):
+            while k < len(t[j]):
+                if r[i] == t[j][k]:
+                    while j < len(t):
+                        result.append([t[j][k]])
+                        j += 1
+                j = 0
+                k += 1
+            k = 0
+            i += 1
+    except AssertionError:
         raise UnknownAttributeException
 
-    return result
+    print result
 
 
 def cross_product(t1, t2):
@@ -150,3 +155,5 @@ def cross_product(t1, t2):
         result = None
 
     return result
+
+projection(EMPLOYEES, ["Surname", "FirstName"])
