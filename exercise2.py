@@ -291,6 +291,10 @@ def decide(input_file, countries_file):
                 decision.append("Accept")
             else:
                 decision.append("Reject")
+        # Reject the entry if the reason for the entry is not returning or visit
+        if entry_record[a]["entry_reason"] != "visit" or "returning":
+            decision.append("Reject")
+
         # Come up with a final decision
         if "Quarantine" in decision:
             result.append("Quarantine")
