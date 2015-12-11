@@ -4,7 +4,7 @@ EMPLOYEES = [["Surname", "FirstName", "Age", "Salary"],
              ["Verdi", "Nico", 36, 4500],
              ["Smith", "Mark", 40, 3900]]
 
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 # """
 #
@@ -23,6 +23,8 @@ EMPLOYEES = [["Surname", "FirstName", "Age", "Salary"],
 #####################
 # HELPER FUNCTIONS ##
 #####################
+
+
 def remove_duplicates(l):
     """
     Removes duplicates from l, where l is a List of Lists.
@@ -116,7 +118,6 @@ def projection(t, r):
     k = 0
     result = [[]]
     match_list = []
-    sub_result = []
     try:
         # while i < len(r):
         #     while k < len(t[j]):
@@ -130,30 +131,27 @@ def projection(t, r):
         #     i += 1
 
         while k < len(r):
-            while j < len(t[0]):
-                if t[0][j] == r[k]:
-                    result[0].append(t[0][j])
+            while j < len(t[i]):
+                if t[i][j] == r[k]:
+                    result[i].append(t[i][j])
                     match_list.append(j)
                 j += 1
             # if j == len(t[i]) and k == len(r):
             #     result.append(sub_result)
             j = 0
             k += 1
-        result.append([])
 
         i = 1
         while i < len(t):
+            result.append([])
             for numeral in match_list:
                 result[len(result)-1].append(t[i][numeral])
             i += 1
-            result.append([])
-        del result[len(result)-1]
+
     except AssertionError:
         raise UnknownAttributeException
 
     return result
-
-
 
 
 def cross_product(t1, t2):
@@ -168,8 +166,8 @@ def cross_product(t1, t2):
     """
     i = 1
     j = 1
-    result = []
-    pass
+    # result = []
+    # pass
 
     result = [t1[0] + t2[0]]
     while i < len(t1):
