@@ -156,4 +156,4 @@ def cross_product(t1, t2):
 
     return result
 
-projection(EMPLOYEES, ["Surname", "FirstName"])
+#projection(EMPLOYEES, ["Surname", "FirstName"])
