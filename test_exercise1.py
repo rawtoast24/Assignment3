@@ -38,12 +38,9 @@ R3 = [[]]
 #####################
 # HELPER FUNCTIONS ##
 #####################
+
 def is_equal(t1, t2):
-
-    t1.sort()
-    t2.sort()
-
-    return t1 == t2
+    return sorted(t1) == sorted(t2)
 
 
 #####################
@@ -98,6 +95,7 @@ def intersection(table1, table2):
 # TEST FUNCTIONS ##
 ###################
 
+
 def test_selection():
     """
     Test select operation.
@@ -107,7 +105,9 @@ def test_selection():
               ["Verdi", "Nico", 36, 4500],
               ["Smith", "Mark", 40, 3900]]
 
-    assert selection(EMPLOYEES, filter_employees) is None
+    assert selection(R1, filter_employees) is None
+    assert selection(R3, filter_employees) is None
+    assert is_equal(result, selection(EMPLOYEES, filter_employees))
 
 def test_projection():
     """

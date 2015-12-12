@@ -4,6 +4,10 @@ EMPLOYEES = [["Surname", "FirstName", "Age", "Salary"],
              ["Verdi", "Nico", 36, 4500],
              ["Smith", "Mark", 40, 3900]]
 
+R2 = [["Department", "Head"],
+      ["production", "Mori"],
+      ["sales", "Brown"]]
+
 
 def filter_employees(row):
     """
@@ -63,16 +67,16 @@ class UnknownAttributeException(Exception):
 
 #
 #
-# def filter_employees(row):
-#     """
-#     Check if employee represented by row
-#     is AT LEAST 30 years old and makes
-#     MORE THAN 3500.
-#     :param row: A List in the format:
-#         [{Surname}, {FirstName}, {Age}, {Salary}]
-#     :return: True if the row satisfies the condition.
-#     """
-#     return row[-2] >= 30 and row[-1] > 3500
+def filter_employees(row):
+    """
+    Check if employee represented by row
+    is AT LEAST 30 years old and makes
+    MORE THAN 3500.
+    :param row: A List in the format:
+        [{Surname}, {FirstName}, {Age}, {Salary}]
+    :return: True if the row satisfies the condition.
+    """
+    return row[-2] >= 30 and row[-1] > 3500
 
 
 def selection(t1, f):
@@ -102,7 +106,7 @@ def selection(t1, f):
         result = None
     return result
 
-print selection(EMPLOYEES,filter_employees)
+print selection(R2,filter_employees)
 # GRADUATES = [["Number", "Surname", "Age"],
 #              [7274, "Robinson", 37],
 #              ["Surname", "O'Malley", 39],
