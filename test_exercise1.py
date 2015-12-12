@@ -33,6 +33,7 @@ R2 = [["Department", "Head"],
       ["production", "Mori"],
       ["sales", "Brown"]]
 
+R3 = [[]]
 
 #####################
 # HELPER FUNCTIONS ##
@@ -74,7 +75,7 @@ def test_selection():
               ["Smith", "Mark", 40, 3900]]
 
     assert is_equal(result, selection(EMPLOYEES, filter_employees))
-
+   
 
 def test_projection():
     """
