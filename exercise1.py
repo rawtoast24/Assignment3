@@ -98,6 +98,8 @@ def selection(t1, f):
         i += 1
     if len(result) == 1:
         result = None
+    if len(t1) < 2:
+        result = None
     return result
 
 print selection(EMPLOYEES,filter_employees)
