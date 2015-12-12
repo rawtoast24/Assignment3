@@ -100,6 +100,14 @@ def valid_date_format(date_string):
     else:
         result = True
 
+    try:
+        now = datetime.datetime.now()
+        date = datetime.datetime.strptime(date_string, '%Y-%m-%d')
+        if now < date:
+            result = False
+    except ValueError:
+        result = False
+
     return result
 
 
