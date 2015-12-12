@@ -55,7 +55,7 @@ def filter_employees(row):
         [{Surname}, {FirstName}, {Age}, {Salary}]
     :return: True if the row satisfies the condition.
     """
-    return row[-2] >= 30 and row[-1] > 3500
+    return row[-2] >= 300 and row[-1] > 3500
 
 
 def intersection(table1, table2):
