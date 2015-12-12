@@ -15,15 +15,15 @@ import re
 import datetime
 import json
 
-######################
-## global constants ##
-######################
+# #####################
+# # global constants ##
+# #####################
 REQUIRED_FIELDS = ["passport", "first_name", "last_name",
                    "birth_date", "home", "entry_reason", "from"]
 
-######################
-## global variables ##
-######################
+# #####################
+# # global variables ##
+# #####################
 '''
 countries:
 dictionary mapping country codes (lowercase strings) to dictionaries
@@ -52,73 +52,20 @@ def is_more_than_x_years_ago(x, date_string):
 
     return (date - x_years_ago).total_seconds() < 0
 
+
 def valid_passport_format(passport_number):
     """
     Checks whether a pasport number is five sets of five alpha-number characters separated by dashes
     :param passport_number: alpha-numeric string
     :return: Boolean; True if the format is valid, False otherwise
     """
-    # count = 0
-    # passport_number = passport_number.upper()
-    # correct = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
-    #            "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
-    passport_regex = re.compile(r"(\w\w\w\w\w)-(\w\w\w\w\w)-(\w\w\w\w\w)-(\w\w\w\w\w)-(\w\w\w\w\w)-(\w\w\w\w\w)")
+    passport_regex = re.compile(r"\w\w\w\w\w-\w\w\w\w\w-\w\w\w\w\w-\w\w\w\w\w-\w\w\w\w\w")
     passport_match = passport_regex.search(passport_number)
     if passport_match is None:
         result = False
     else:
         result = True
-
-    # decisions = []
-    # if len(passport_number) == 29:
-    #     while count < 5:
-    #         if passport_number[count] in correct:
-    #             decisions.append("True")
-    #         else:
-    #             decisions.append("False")
-    #         count += 1
-    #     count = 6
-    #     while count < 11:
-    #         if passport_number[count] in correct:
-    #             decisions.append("True")
-    #         else:
-    #             decisions.append("False")
-    #         count += 1
-    #     count = 12
-    #     while count < 17:
-    #             if passport_number[count] in correct:
-    #                 decisions.append("True")
-    #             else:
-    #                 decisions.append("False")
-    #             count += 1
-    #     count = 18
-    #     while count < 22:
-    #             if passport_number[count] in correct:
-    #                 decisions.append("True")
-    #             else:
-    #                 decisions.append("False")
-    #             count += 1
-    #     count = 24
-    #     while count < 29:
-    #             if passport_number[count] in correct:
-    #                 decisions.append("True")
-    #             else:
-    #                 decisions.append("False")
-    #             count += 1
-    #     count = 5
-    #     while count < len(passport_number):
-    #         if passport_number[count] == "-":
-    #             decisions.append("True")
-    #         else:
-    #             decisions.append("False")
-    #         count += 6
-    #     if "False" in decisions:
-    #         result = False
-    #     else:
-    #         result = True
-    # else:
-    #     result = False
     return result
 
 
@@ -129,64 +76,30 @@ def valid_visa_format(visa_code):
     :return: Boolean; True if the format is valid, False otherwise
 
     """
-    count = 0
-    visa_code = visa_code.upper()
-    correct = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
-               "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-    decisions = []
-    if len(visa_code) == 11:
-        while count < 5:
-            if visa_code[count] in correct:
-                decisions.append("True")
-            else:
-                decisions.append("False")
-            count += 1
-        count = 6
-        while count < 11:
-            if visa_code[count] in correct:
-                decisions.append("True")
-            else:
-                decisions.append("False")
-            count += 1
-        if visa_code[5] == "-":
-            decisions.append("True")
-        else:
-            decisions.append("False")
-
-        if "False" in decisions:
-            result = False
-        else:
-            result = True
-    else:
+    visa_regex = re.compile(r"\w\w\w\w\w-\w\w\w\w\w")
+    visa_match = visa_regex.search(visa_code)
+    if visa_match is None:
         result = False
+    else:
+        result = True
+
     return result
+
 
 def valid_date_format(date_string):
     """
-    Checks whether a date has the format YYYY-mm-dd in numbers
+    Checks whether a date has the format YYYY-MM-DD in numbers
     :param date_string: date to be checked
     :return: Boolean True if the format is valid, False otherwise
     """
-    correct = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    numbers = [0, 1, 2, 3, 5, 6, 8, 9]
-    decisions = []
+    date_regex = re.compile(r"\d\d\d\d-\d\d-\d\d")
+    date_match = date_regex.search(date_string)
 
-    if len(date_string) == 10:
-        for i in numbers:
-            if date_string[i] in correct:
-                decisions.append("True")
-            else:
-                decisions.append("False")
-        if date_string[4] and date_string[7] == "-":
-            decisions.append("True")
-        else:
-            decisions.append("False")
-        if "False" in decisions:
-            result = False
-        else:
-            result = True
-    else:
+    if date_match is None:
         result = False
+    else:
+        result = True
+
     return result
 
 
@@ -197,7 +110,7 @@ def decide(input_file, countries_file):
     :param input_file: The name of a JSON formatted file that contains
         cases to decide
     :param countries_file: The name of a JSON formatted file that contains
-        country data, such as whether an entry or transit visa is required,
+        country data, such as whether an entry visa is required,
         and whether there is currently a medical advisory
     :return: List of strings. Possible values of strings are:
         "Accept", "Reject", and "Quarantine"
@@ -208,7 +121,7 @@ def decide(input_file, countries_file):
     a = 0
 
     # Convert the entry record from JSON into Python
-    with open(input_file,"r") as file_reader:
+    with open(input_file, "r") as file_reader:
         file_contents = file_reader.read()
 
     entry_record = json.loads(file_contents)
@@ -232,6 +145,7 @@ def decide(input_file, countries_file):
     while a < len(entry_record):
         # create a list to store the decision for each check within a record
         decision = []
+
         # Step 1. check for missing information
         for key in entry_record[a]:
             if entry_record[a][key] == "":
@@ -239,21 +153,22 @@ def decide(input_file, countries_file):
             else:
                 decision.append("Accept")
         for key in entry_record[a]["home"]:
-            if entry_record[a]["home"][key] =="":
+            if entry_record[a]["home"][key] == "":
                 decision.append("Reject")
             else:
                 decision.append("Accept")
         for key in entry_record[a]["from"]:
-            if entry_record[a]["from"][key] =="":
+            if entry_record[a]["from"][key] == "":
                 decision.append("Reject")
             else:
                 decision.append("Accept")
         if "visa" in entry_record[a]:
             for key in entry_record[a]["visa"]:
-                if entry_record[a]["visa"][key] =="":
+                if entry_record[a]["visa"][key] == "":
                     decision.append("Reject")
                 else:
                     decision.append("Accept")
+
         # Step 2. Check all locations
         if entry_record[a]["from"]["country"] not in country_list:
             decision.append("Reject")
@@ -262,46 +177,50 @@ def decide(input_file, countries_file):
         if "via" in entry_record[a]:
             if entry_record[a]["via"] not in country_list:
                 decision.append("Reject")
+
         # Step 3. Accept all returning KAN citizens
         if entry_record[a]["home"]["country"] == "KAN":
             decision.append("Accept")
+
         # Step 4. Check if any visitors have a valid visa
         if entry_record[a]["entry_reason"] == "visit":
             if valid_date_format(entry_record[a]["visa"]["date"]):
-                if is_more_than_x_years_ago(2,entry_record[a]["visa"]["date"]):
+                if is_more_than_x_years_ago(2, entry_record[a]["visa"]["date"]):
                     decision.append("Reject")
+
         # Step 5. Check if anyone is coming from a country with a medical alert
         if entry_record[a]["from"]["country"] in medical_alert:
             decision.append("Quarantine")
 
-        # # Check for valid Passport Number Format
-        # if valid_passport_format(entry_record[a]["passport"]):
-        #     decision.append("Accept")
-        # else:
-        #     decision.append("Reject")
-        #
-        # # Check for valid Visa Number Format
-        # if entry_record[a]["entry_reason"] == "visit":
-        #     if valid_visa_format(entry_record[a]["visa"]["code"]):
-        #         decision.append("Accept")
-        #     else:
-        #         decision.append("Reject")
-        #
-        # # Check for valid Birth Date Format
-        # if valid_date_format(entry_record[a]["birth_date"]):
-        #     decision.append("Accept")
-        # else:
-        #     decision.append("Reject")
-        #
-        # # Check for valid Visa Date Format
-        # if entry_record[a]["entry_reason"] == "visit":
-        #     if valid_date_format(entry_record[a]["visa"]["date"]):
-        #         decision.append("Accept")
-        #     else:
-        #         decision.append("Reject")
-        # # Reject the entry if the reason for the entry is not returning or visit
-        # if entry_record[a]["entry_reason"] != "visit" or "returning":
-        #     decision.append("Reject")
+        # Check for valid Passport Number Format
+        if valid_passport_format((entry_record[a]["passport"])):
+            decision.append("Accept")
+        else:
+            decision.append("Reject")
+
+        # Check for valid Visa Number Format
+        if entry_record[a]["entry_reason"] == "visit":
+            if valid_visa_format(entry_record[a]["visa"]["code"]):
+                decision.append("Accept")
+            else:
+                decision.append("Reject")
+
+        # Check for valid Birth Date Format
+        if valid_date_format(entry_record[a]["birth_date"]):
+            decision.append("Accept")
+        else:
+            decision.append("Reject")
+
+        # Check for valid Visa Date Format
+        if entry_record[a]["entry_reason"] == "visit":
+            if valid_date_format(entry_record[a]["visa"]["date"]):
+                decision.append("Accept")
+            else:
+                decision.append("Reject")
+
+        # Reject the entry if the reason for the entry is not returning or visit
+        if entry_record[a]["entry_reason"] not in ["visit", "returning"]:
+            decision.append("Reject")
 
         # Come up with a final decision
         if "Quarantine" in decision:
@@ -315,7 +234,8 @@ def decide(input_file, countries_file):
         a += 1
 
     return result
-print decide("Entry Record.json","countries.json")
+
+print decide("Entry Record.json", "countries.json")
 
 
 """

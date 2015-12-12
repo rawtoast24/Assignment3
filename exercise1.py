@@ -4,6 +4,18 @@ EMPLOYEES = [["Surname", "FirstName", "Age", "Salary"],
              ["Verdi", "Nico", 36, 4500],
              ["Smith", "Mark", 40, 3900]]
 
+
+def filter_employees(row):
+    """
+    Check if employee represented by row
+    is AT LEAST 30 years old and makes
+    MORE THAN 3500.
+    :param row: A List in the format:
+        [{Surname}, {FirstName}, {Age}, {Salary}]
+    :return: True if the row satisfies the condition.
+    """
+    return row[-2] >= 300 and row[-1] > 3500
+
 # !/usr/bin/env python3
 
 # """
@@ -48,11 +60,7 @@ class UnknownAttributeException(Exception):
     """
     pass
 
-# EMPLOYEES = [["Surname", "FirstName", "Age", "Salary"],
-#              ["Smith", "Mary", 25, 2000],
-#              ["Black", "Lucy", 40, 3000],
-#              ["Verdi", "Nico", 36, 4500],
-#              ["Smith", "Mark", 40, 3900]]
+
 #
 #
 # def filter_employees(row):
@@ -92,7 +100,7 @@ def selection(t1, f):
         result = None
     return result
 
-
+print selection(EMPLOYEES,filter_employees)
 # GRADUATES = [["Number", "Surname", "Age"],
 #              [7274, "Robinson", 37],
 #              ["Surname", "O'Malley", 39],
@@ -181,4 +189,4 @@ def cross_product(t1, t2):
 
     return result
 
-print projection(EMPLOYEES, ["Surname", "FirstName"])
+# print projection(EMPLOYEES, ["Surname", "FirstName"])
