@@ -61,6 +61,39 @@ def filter_employees(row):
     return row[-2] >= 30 and row[-1] > 3500
 
 
+def intersection(table1, table2):
+    """
+    Established intersection function to perform the intersection set operation on tables 1 and 2. Table 3 variable is
+    established to represent the unique rows that appear in both table 1 and table 2.
+
+    :param table1: a table (a List of Lists)
+    :param table2: a table (a List of Lists)
+    :return: table3: a table with the header from table1/table2 and unique rows that appear in both tables
+    :raises: MismatchedAttributesException:
+        if tables table1 and table2 don't have the same attributes
+    """
+    table3 = []
+    i = 0
+    j = 0
+    if table1[0] != table2[0]:
+        raise Exception("MismatchedAttributesException")
+    else:
+        while i < len(table1):
+            while j < len(table2):
+                if table1[i] == table2[j]:
+                    table3.append(table2[j])
+                    j += 1
+                else:
+                    j += 1
+            j = 0
+            i += 1
+
+    if len(table3) == 1:
+        table3 = None
+    return table3
+
+
+
 ###################
 # TEST FUNCTIONS ##
 ###################
@@ -74,8 +107,7 @@ def test_selection():
               ["Verdi", "Nico", 36, 4500],
               ["Smith", "Mark", 40, 3900]]
 
-    assert is_equal(result, selection(EMPLOYEES, filter_employees))
-   
+    assert selection(EMPLOYEES, filter_employees) is None
 
 def test_projection():
     """
