@@ -117,22 +117,24 @@ def projection(t, r):
     """
     Perform projection operation on table t
     using the attributes subset r.
-
     Example:
     > R = [["A", "B", "C"], [1, 2, 3], [4, 5, 6]]
     > projection(R, ["A", "C"])
     [["A", "C"], [1, 3], [4, 6]]
-
     """
-    # i tracks the spot for the attribute list
+    # i tracks which row within the table is being compared. 
     i = 0
-    # j tracks which row within the table is being compared
+    # j tracks which row within the table is being compared.
     j = 0
-    # k tracks which item within the row is being compared
+    # k tracks the spot for the attribute list. 
     k = 0
     result = [[]]
     match_list = []
-    try:
+    
+	if len(t[0]) < len(r):
+		raise UnknownAttributeException
+		
+	try:
         # while i < len(r):
         #     while k < len(t[j]):
         #         if r[i] == t[j][k]:
