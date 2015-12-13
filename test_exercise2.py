@@ -23,6 +23,6 @@ def test_returning():
     """
     Travellers are returning to KAN.
     """
-    assert decide("test_returning_citizen.json", "watchlist.json", "countries.json") ==\
+    assert decide("test_returning_citizen.json", "countries.json") ==\
         ["Accept", "Accept", "Quarantine"]
 
