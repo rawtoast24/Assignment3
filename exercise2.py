@@ -189,7 +189,8 @@ def decide(input_file, countries_file):
         # Step 3. Accept all returning KAN citizens
         if entry_record[a]["home"]["country"] == "KAN":
             decision.append("Accept")
-
+        if entry_record[a]["entry_reason"] == "returning" and entry_record[a]["home"]["country"] != "KAN":
+            decision.append("Reject")
         # Step 4. Check if any visitors have a valid visa
         if entry_record[a]["entry_reason"] == "visit":
             if valid_date_format(entry_record[a]["visa"]["date"]):
@@ -243,7 +244,7 @@ def decide(input_file, countries_file):
 
     return result
 
-# print decide("Entry_Record.json", "countries.json")
+print decide("Entry_Record.json", "countries.json")
 
 
 """

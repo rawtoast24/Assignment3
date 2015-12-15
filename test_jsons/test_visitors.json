@@ -22,7 +22,7 @@
   },
   {
     "passport": "FWO9A-B8MDF-TGXW5-H49SO-HI5VF",
-    "first_name": "HARRY",
+    "first_name": "JAMES",
     "last_name": "POTTER",
     "birth_date": "1992-07-31",
     "home": {
@@ -34,7 +34,7 @@
     "from": {
       "city": "b",
       "region": "b",
-      "country": "III"
+      "country": "JFK"
 
     }
   }
